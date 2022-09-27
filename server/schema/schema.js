@@ -1,5 +1,9 @@
 const { projects, clients } = require("../sampleData.js");
 
+// Mongoose models
+const Project = require("../models/Project");
+const Client = require("../models/Client");
+
 const {
   GraphQLObjectType,
   GraphQLID,
@@ -31,7 +35,7 @@ const ProjectType = new GraphQLObjectType({
       type: ClientType,
       resolve(parent, args) {
         // finding the client where the id matches the client id of the project (parent). As client is a child of a project
-        return clients.find((client) => client.id === parent.clientId);
+        return clients.findById(parent.clientId);
       },
     },
   }),
@@ -44,7 +48,7 @@ const RootQuery = new GraphQLObjectType({
     projects: {
       type: new GraphQLList(ProjectType), // list type as its a list of clients
       resolve(parent, args) {
-        return projects;
+        return Project.find();
       },
     },
     project: {
@@ -52,13 +56,13 @@ const RootQuery = new GraphQLObjectType({
       type: ProjectType,
       args: { id: { type: GraphQLID } }, //  id arg, to know which client to get
       resolve(parent, args) {
-        return projects.find((project) => project.id === args.id);
+        return Project.findById(args.id);
       }, // The resolver is What to return/respond with
     },
     clients: {
       type: new GraphQLList(ClientType), // list type as its a list of clients
       resolve(parent, args) {
-        return clients;
+        return Client.find();
       },
     },
     client: {
@@ -66,7 +70,7 @@ const RootQuery = new GraphQLObjectType({
       type: ClientType,
       args: { id: { type: GraphQLID } }, //  id arg, to know which client to get
       resolve(parent, args) {
-        return clients.find((client) => client.id === args.id);
+        return Client.findById(args.id);
       }, // The resolver is What to return/respond with
     },
   },
