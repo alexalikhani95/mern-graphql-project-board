@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import ClientInfo from "../components/ClientInfo";
 import { GET_PROJECT } from "../queries/projectQueries";
 import DeleteProjectButton from "../components/DeleteProjectButton";
+import EditProjectForm from "../components/EditProjectForm";
 
 const Project = () => {
   const { id } = useParams(); // Get the id from the url
@@ -24,6 +25,8 @@ const Project = () => {
           <p className="lead">{data.project.status}</p>
 
           <ClientInfo client={data.project.client} />
+
+          <EditProjectForm project={data.project} />
 
           <DeleteProjectButton projectId={data.project.id} />
         </div>
